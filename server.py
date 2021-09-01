@@ -8,6 +8,11 @@ load_dotenv()
 contacts = db.contacts
 
 
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
 @app.route("/<string:page>")
 def page(page=None):
     return render_template(page)
