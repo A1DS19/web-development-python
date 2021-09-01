@@ -1,23 +1,18 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
 
-@app.route("/index.html")
-def index():
-    return render_template("index.html")
+@app.route("/<string:page>")
+def page(page=None):
+    return render_template(page)
 
 
-@app.route("/about.html")
-def about():
-    return render_template("about.html")
-
-
-@app.route("/works.html")
-def works():
-    return render_template("works.html")
-
-
-@app.route("/contact.html")
-def contact():
-    return render_template("contact.html")
+@app.route("/submit_contact", methods=["POST", "GET"])
+def submit_contact():
+    if request.method == "POST":
+        try:
+            data = request.form.to_dict()
+            return render_template("/thank_you.html", name=data["email"])
+        except:
+            return render_template("contact.html")
