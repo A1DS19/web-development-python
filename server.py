@@ -1,6 +1,11 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request
+from dotenv import load_dotenv
+from config.db import db
 
 app = Flask(__name__)
+load_dotenv()
+
+contacts = db.contacts
 
 
 @app.route("/<string:page>")
@@ -13,6 +18,8 @@ def submit_contact():
     if request.method == "POST":
         try:
             data = request.form.to_dict()
+            contacts.insert_one(data)
             return render_template("/thank_you.html", name=data["email"])
-        except:
+        except Exception as err:
+            print(err)
             return render_template("contact.html")
